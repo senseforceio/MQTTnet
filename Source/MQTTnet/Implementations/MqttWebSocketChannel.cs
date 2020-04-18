@@ -83,9 +83,10 @@ namespace MQTTnet.Implementations
 #if NETSTANDARD2_1
             if (_options.TlsOptions?.UseTls == true)
             {
-                clientWebSocket.Options.RemoteCertificateValidationCallback = new System.Net.Security.RemoteCertificateValidationCallback((a,b,c,d) =>
+                clientWebSocket.Options.RemoteCertificateValidationCallback = 
+                new System.Net.Security.RemoteCertificateValidationCallback((sender,certificate,certChain,sslPolicyErrors) =>
                 {
-                    return _options.TlsOptions.CertificateValidationCallback(b, c, d, null);
+                    return _options.TlsOptions.CertificateValidationCallback(certificate, certChain, sslPolicyErrors, null);
                 });
             }
 #endif
