@@ -80,6 +80,16 @@ namespace MQTTnet.Implementations
                 clientWebSocket.Options.Cookies = _options.CookieContainer;
             }
 
+#if NETSTANDARD2_1
+            if (_options.TlsOptions?.UseTls == true)
+            {
+                clientWebSocket.Options.RemoteCertificateValidationCallback = new System.Net.Security.RemoteCertificateValidationCallback((a,b,c,d) =>
+                {
+                    return _options.TlsOptions.CertificateValidationCallback(b, c, d, null);
+                });
+            }
+#endif
+
             if (_options.TlsOptions?.UseTls == true && _options.TlsOptions?.Certificates != null)
             {
                 clientWebSocket.Options.ClientCertificates = new X509CertificateCollection();
